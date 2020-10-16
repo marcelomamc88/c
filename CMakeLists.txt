@@ -12,4 +12,5 @@ add_executable(revisao_estrutura_dados.c revisao_estrutura_dados.c)
 add_executable(linked_list_struct.c linked_list_struct.c)
 add_executable(linked_list_vector.c linked_list_vector.c)
 add_executable(stack_vector.c stack_vector.c)
+add_executable(stack_struct.c stack_struct.c)
 
