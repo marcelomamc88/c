@@ -6,8 +6,8 @@
 //***** CONFIGS *****
 //TYPE_NAME: "int"|"float"|"char"
 //typedef: int|float|char*
-#define TYPE_NAME "char"
-typedef char* TYPE;
+#define TYPE_NAME "int"
+typedef int TYPE;
 //***** CONFIGS *****
 
 typedef struct t_node node;
@@ -28,6 +28,7 @@ struct t_linkedlist{
 /* ok */ void erase(linkedList *list, int position); //remove um no
 /* ok */ void clear(linkedList *list); //limpa lista
 /* ok */ int indexOf(linkedList *list, node *noRef); //indice de um no
+/* ok */ int indexOfByValue(linkedList *list, TYPE value); //busca a posicao da primeira ocorrencia
 /* ok */ node* atPos(linkedList *ll, int position); //node em uma posicao
 node *min(linkedList *list, int position); //menor valor a partir de posicao
 node *max(linkedList *list, int position); //maior valor a partir de posicao
@@ -40,38 +41,6 @@ void sort(linkedList *list);
 /* ok */ void print(linkedList *list);
 /* ok */ void printNode(node *no);
 /* ok */ const char* format();
-
-
-void main (void){
-    linkedList ll;
-
-    createList(&ll);
-    printf("is empty? %d \r\n", isEmpty(&ll));
-
-    push(&ll, "joaozinho"); //3
-    push(&ll, "30"); //2
-    push(&ll, "maria"); //1
-
-    print(&ll);
-
-    insert(&ll, "20", 3);
-    push(&ll, "100");
-
-    print(&ll);
-
-    xchgNodes(&ll, atPos(&ll, 3), atPos(&ll, 5));
-
-    print(&ll);
-
-    erase(&ll, 5);
-
-    print(&ll);
-
-    clear(&ll);
-
-
-
-}
 
 node* pop(linkedList *list){
     if (isEmpty(list)) return NULL;
@@ -239,11 +208,32 @@ int indexOf(linkedList *list, node *noRef){
     return -1;
 }
 
+int indexOfByValue(linkedList *list, TYPE value){
+
+    if (isEmpty(list)) return -1;
+
+    node *head = list->head;
+
+    if (value == head->value) return 1;
+
+    node *no = head->next;
+
+    for (int i = 2; i<=list->size; ++i){
+        if (no->value == value) return i;
+
+        no = no->next;
+    }
+
+    return -1;
+}
+
 int isEmpty(linkedList *list){
     return list->size == 0;
 }
 
 void print(linkedList *list){
+    if (isEmpty(list)) return;
+
     node *noh = list->head;
 
     printf("\r\n ");
