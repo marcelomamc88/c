@@ -17,7 +17,7 @@ struct t_stack{
 /* ok */ element* createElement();
 /* ok */ void push(int value, stack *s);
 /* ok */ element* top(stack *s);
-element* pop(stack *s);
+/* ok */ element* pop(stack *s);
 /* ok */ int size(stack *s);
 /* ok */ int isEmpty(stack *s);
 /* ok */ void print(stack *s);
