@@ -1,10 +1,18 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include <string.h>
+
+//***** CONFIGS *****
+//TYPE_NAME: "int"|"float"|"char"
+//typedef: int|float|char*
+#define TYPE_NAME "char"
+typedef char* TYPE;
+//***** CONFIGS *****
 
 typedef struct t_node node;
 struct t_node{
-    int number;
+    TYPE value;
     node *next;
 };
 
@@ -14,8 +22,8 @@ struct t_linkedlist{
     int size;
 };
 
-/* ok */ node* push(linkedList *list, int number);
-/* ok */ node* insert(linkedList *list, int number, int position);
+/* ok */ node* push(linkedList *list, TYPE value);
+/* ok */ node* insert(linkedList *list, TYPE value, int position);
 /* ok */ node* pop(linkedList *list); //informa o head
 /* ok */ void erase(linkedList *list, int position); //remove um no
 /* ok */ void clear(linkedList *list); //limpa lista
@@ -27,10 +35,11 @@ node *max(linkedList *list, int position); //maior valor a partir de posicao
 void sort(linkedList *list);
 /* ok */ int isEmpty(linkedList *list);
 /* ok */ void createList(linkedList *list);
-/* ok */ node* createNode(int number);
+/* ok */ node* createNode(TYPE value);
 /* ok */ node* prevNode(linkedList *list, node *noRef);
 /* ok */ void print(linkedList *list);
 /* ok */ void printNode(node *no);
+/* ok */ const char* format();
 
 
 void main (void){
@@ -39,14 +48,14 @@ void main (void){
     createList(&ll);
     printf("is empty? %d \r\n", isEmpty(&ll));
 
-    push(&ll, 10); //3
-    push(&ll, 30); //2
-    push(&ll, 50); //1
+    push(&ll, "joaozinho"); //3
+    push(&ll, "30"); //2
+    push(&ll, "maria"); //1
 
     print(&ll);
 
-    insert(&ll, 20, 3);
-    push(&ll, 100);
+    insert(&ll, "20", 3);
+    push(&ll, "100");
 
     print(&ll);
 
@@ -60,7 +69,7 @@ void main (void){
 
     clear(&ll);
 
-    print(&ll);
+
 
 }
 
@@ -126,10 +135,10 @@ void createList(linkedList *list){
     list->size = 0;
 }
 
-node* createNode(int number){
+node* createNode(TYPE value){
     node* noh = (node *) malloc(sizeof(node));
 
-    noh->number = number;
+    noh->value = value;
     noh->next = NULL;
 
     return noh;
@@ -167,8 +176,8 @@ void xchgNodes(linkedList *list, node *no_a, node *no_b){
     no_a->next = next_b;
 }
 
-node* push(linkedList *list, int number){
-    node *newNoh = createNode(number);
+node* push(linkedList *list, TYPE value){
+    node *newNoh = createNode(value);
 
     node *head = list->head;
 
@@ -179,9 +188,9 @@ node* push(linkedList *list, int number){
     return newNoh;
 }
 
-node* insert(linkedList *list, int number, int position){
+node* insert(linkedList *list, TYPE value, int position){
 
-    node *newNoh = createNode(number);
+    node *newNoh = createNode(value);
 
     if (isEmpty(list)){
         list->head = newNoh;
@@ -237,15 +246,29 @@ int isEmpty(linkedList *list){
 void print(linkedList *list){
     node *noh = list->head;
 
-    printf("\r\n %d, ", noh->number);
+    printf("\r\n ");
+    printf(format(), noh->value);
 
     for (int i = 2; i<=list->size; ++i){
         noh = noh->next;
 
-        printf("%d, ", noh->number);
+        printf(format(), noh->value);
     }
 }
 
 void printNode(node *no){
-    printf("\r\n %d \r\n", no->number);
+    printf("\r\n ");
+    printf(format(), no->value);
+    printf(" \r\n");
+}
+
+const char* format() {
+
+    if (strcmp(TYPE_NAME, "float") == 0){
+        return "%.2f, ";
+    }else if(strcmp(TYPE_NAME, "char") == 0){
+        return "%s, ";
+    }else{
+        return "%d, ";
+    }
 }

@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
+
+//***** CONFIGS *****
+//TYPE_NAME: "int"|"float"|"char"
+//typedef: int|float|char*
+#define TYPE_NAME "int"
+typedef int TYPE;
+//***** CONFIGS *****
 
 typedef struct t_element element;
 struct t_element{
-    int value;
+    TYPE value;
     element *next;
 };
 
@@ -15,12 +23,13 @@ struct t_stack{
 
 /* ok */ stack* createStack();
 /* ok */ element* createElement();
-/* ok */ void push(int value, stack *s);
+/* ok */ void push(TYPE value, stack *s);
 /* ok */ element* top(stack *s);
 /* ok */ element* pop(stack *s);
 /* ok */ int size(stack *s);
 /* ok */ int isEmpty(stack *s);
 /* ok */ void print(stack *s);
+/* ok */ const char* format();
 
 void main(void){
     stack *s = createStack();
@@ -31,10 +40,12 @@ void main(void){
 
     print(s);
 
-    printf("\r\nPOP: %d", pop(s)->value);
+    printf("\r\nPOP:");
+    printf(format(), pop(s)->value);
 
     print(s);
 }
+
 
 element* pop(stack *s){
     if (isEmpty(s)) return NULL;
@@ -52,7 +63,7 @@ element* top(stack *s){
     return s->top;
 }
 
-void push(int value, stack *s){
+void push(TYPE value, stack *s){
     element *e = createElement();
 
     e->value = value;
@@ -73,7 +84,12 @@ stack* createStack(){
 element* createElement(){
     element *e = (element *) malloc(sizeof(element));
 
-    e->value = -1;
+    if (strcmp(TYPE_NAME, "char") == 0){
+        e->value = "";
+    }else{
+        e->value = -1;
+    }
+
     e->next = NULL;
 
     return e;
@@ -88,7 +104,8 @@ void print(stack *s){
     element *e = top(s);
 
     for (int i=0 ; i<s->size; i++){
-        printf("\r\n- %d", e->value);
+        printf("\r\n- ");
+        printf(format(), e->value);
 
         e = e->next;
     }
@@ -98,4 +115,15 @@ void print(stack *s){
 
 int isEmpty(stack *s){
     return s->size == 0;
+}
+
+const char* format() {
+
+    if (strcmp(TYPE_NAME, "float") == 0){
+        return "%.2f, ";
+    }else if(strcmp(TYPE_NAME, "char") == 0){
+        return "%s, ";
+    }else{
+        return "%d, ";
+    }
 }
