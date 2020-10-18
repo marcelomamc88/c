@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+
 int fat_recursivo(int n){
     if (n == 0 || n == 1) return 1;
 

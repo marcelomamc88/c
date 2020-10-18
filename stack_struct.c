@@ -5,8 +5,8 @@
 //***** CONFIGS *****
 //TYPE_NAME: "int"|"float"|"char"
 //typedef: int|float|char*
-#define TYPE_NAME "int"
-typedef int TYPE;
+#define TYPE_NAME "char"
+typedef char* TYPE;
 //***** CONFIGS *****
 
 typedef struct t_element element;
@@ -30,22 +30,6 @@ struct t_stack{
 /* ok */ int isEmpty(stack *s);
 /* ok */ void print(stack *s);
 /* ok */ const char* format();
-
-void main(void){
-    stack *s = createStack();
-
-    push(5, s);
-    push(10, s);
-    push(525, s);
-
-    print(s);
-
-    printf("\r\nPOP:");
-    printf(format(), pop(s)->value);
-
-    print(s);
-}
-
 
 element* pop(stack *s){
     if (isEmpty(s)) return NULL;
