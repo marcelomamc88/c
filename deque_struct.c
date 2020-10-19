@@ -138,9 +138,7 @@ void print(deque *d){
     printf("\r\n==> ");
     printf(format(), noh->value);
 
-    for (int i = 2; i<=d->size; ++i){
-        noh = noh->next;
-
+    while(noh = noh->next){
         printf(format(), noh->value);
     }
 }
