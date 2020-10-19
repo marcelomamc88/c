@@ -1,6 +1,6 @@
 #include "linked_list_struct.c"
 
-#define HASH_TABLE 10
+#define HASH_TABLE 17
 
 linkedList* createHashTable();
 void pushHashTable(linkedList *ht, int value);
@@ -14,7 +14,7 @@ void main(void){
     for (int i=0; i<500; ++i){
         pushHashTable(ht, rand() % 700 + 1);
     }
-    
+
     printHashTable(ht);
 
     search(ht, 525);
