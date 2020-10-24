@@ -5,8 +5,8 @@
 //***** CONFIGS *****
 //TYPE_NAME: "int"|"float"|"char"
 //typedef: int|float|char*
-#define TYPE_NAME "char"
-typedef char* TYPE;
+#define TYPE_NAME "int"
+typedef int TYPE;
 //***** CONFIGS *****
 
 typedef struct t_node node;
@@ -32,22 +32,6 @@ struct t_queue{
 /* ok */ node* rear(queue *q);
 /* ok */ const char* format();
 
-
-void main(void){
-
-    queue *q = createQueue();
-
-    enqueue("marcelo", q);
-    enqueue("juan", q);
-    enqueue("anny", q);
-    enqueue("zayon", q);
-    print(q);
-
-    dequeue(q);
-    dequeue(q);
-
-    print(q);
-}
 
 queue* createQueue(){
     queue *q = (queue *) malloc(sizeof(queue));
