@@ -40,15 +40,17 @@ void print(queue *q);
 node* front(queue *q);
 node* rear(queue *q);
 const char* format();
-tree* build_tree_1(); //binary search
-tree* build_tree_2(); //not binary search
-int isComplete(tree *root); //todas folhas tem mesma altura
+int isComplete(tree *root, int level); //todas folhas tem mesma altura /// nao eh completa < 0 <= eh completa
 int isBinarySearch(tree *root); //esq < raiz < dir
 int isLeaf(tree *node);
+tree* build_tree_1(); //binary search - nao completa
+tree* build_tree_2(); //not binary search - nao completa
+tree* build_tree_3(); //binary search - completa
+tree* build_tree_4(); //binary search - nao completa
 
 
 void main(void){
-    tree *root = build_tree_1();
+    tree *root = build_tree_4();
 
     printf("BFS - Breadth First Search: ");
     run_breadth_first_search(root); //percurso em largura
@@ -64,6 +66,8 @@ void main(void){
 
     printf("\r\nIS BINARY SEARCH?: %s", isBinarySearch(root) == 0 ? "NAO" : "SIM");
 
+    printf("\r\nTREE : %s", isComplete(root, 0) < 0 ? "NAO COMPLETA" : "COMPLETA");
+
 }
 
 tree* createNodeTree(tree *root, int value){
@@ -76,8 +80,6 @@ tree* createNodeTree(tree *root, int value){
 
     return n;
 }
-
-
 
 //red
 void run_pre_ordem_r(tree *root){
@@ -137,6 +139,26 @@ void run_breadth_first_search(tree *root){
             enqueue(*root->right, q);
         }
     }
+
+}
+
+// nao eh completa < 0 <= eh completa
+int isComplete(tree *root, int level){
+
+    if (root->left == NULL && root->right == NULL) return level;
+
+    ++level;
+
+    int level_left = level;
+    int level_right = level;
+
+    if (root->left != NULL) level_left = isComplete(root->left, level);
+    if (root->right != NULL) level_right = isComplete(root->right, level);
+
+    //se receber profundidade diferentes do ramo direito e esquerdo, ou se algum ramo mais profundo já esteja desbalanceado
+    if (level_left != level_right || level_left  == -1 || level_right == -1) return -1;
+
+    return level_left;
 
 }
 
@@ -299,12 +321,52 @@ tree* build_tree_2(){
     tree *root = createNodeTree(NULL, 13);
 
     root->left = createNodeTree(root, 10);
-    root->left->left = createNodeTree(root->left, 11);
-    root->left->right = createNodeTree(root->left, 12);
+        root->left->left = createNodeTree(root->left, 11);
+        root->left->right = createNodeTree(root->left, 12);
     root->right = createNodeTree(root, 25);
-    root->right->left = createNodeTree(root, 20);
-    root->right->right = createNodeTree(root, 31);
-    root->right->right->left = createNodeTree(root, 29);
+        root->right->left = createNodeTree(root, 20);
+        root->right->right = createNodeTree(root, 31);
+            root->right->right->left = createNodeTree(root, 29);
+
+    return root;
+}
+
+/*
+ Binary Search - completa
+                13
+            ´         `
+         10              25
+       ´    `          ´     `
+    2         12    20          31
+*/
+tree* build_tree_3(){
+    tree *root = createNodeTree(NULL, 13);
+
+    root->left = createNodeTree(root, 10);
+        root->left->left = createNodeTree(root->left, 2);
+        root->left->right = createNodeTree(root->left, 12);
+    root->right = createNodeTree(root, 25);
+        root->right->left = createNodeTree(root, 20);
+        root->right->right = createNodeTree(root, 31);
+
+    return root;
+}
+
+/*
+ Binary Search - nao completa
+                13
+            ´         `
+         10              25
+       ´    `          ´     `
+    2         12
+*/
+tree* build_tree_4(){
+    tree *root = createNodeTree(NULL, 13);
+
+    root->left = createNodeTree(root, 10);
+        root->left->left = createNodeTree(root->left, 2);
+        root->left->right = createNodeTree(root->left, 12);
+    root->right = createNodeTree(root, 25);
 
     return root;
 }
