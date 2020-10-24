@@ -40,25 +40,15 @@ void print(queue *q);
 node* front(queue *q);
 node* rear(queue *q);
 const char* format();
+tree* build_tree_1(); //binary search
+tree* build_tree_2(); //not binary search
+int isComplete(tree *root); //todas folhas tem mesma altura
+int isBinarySearch(tree *root); //esq < raiz < dir
+int isLeaf(tree *node);
 
-/*
-                13
-            ´         `
-         10              25
-       ´    `          ´     `
-    2         12    20          31
-                              ´
-                            29
-*/
+
 void main(void){
-    tree *root = createNodeTree(NULL, 13);
-        root->left = createNodeTree(root, 10);
-            root->left->left = createNodeTree(root->left, 2);
-            root->left->right = createNodeTree(root->left, 12);
-        root->right = createNodeTree(root, 25);
-            root->right->left = createNodeTree(root, 20);
-            root->right->right = createNodeTree(root, 31);
-                root->right->right->left = createNodeTree(root, 29);
+    tree *root = build_tree_1();
 
     printf("BFS - Breadth First Search: ");
     run_breadth_first_search(root); //percurso em largura
@@ -71,6 +61,9 @@ void main(void){
 
     printf("\r\nPOS ORDEM: ");
     run_pos_ordem_r(root);
+
+    printf("\r\nIS BINARY SEARCH?: %s", isBinarySearch(root) == 0 ? "NAO" : "SIM");
+
 }
 
 tree* createNodeTree(tree *root, int value){
@@ -83,6 +76,8 @@ tree* createNodeTree(tree *root, int value){
 
     return n;
 }
+
+
 
 //red
 void run_pre_ordem_r(tree *root){
@@ -144,6 +139,43 @@ void run_breadth_first_search(tree *root){
     }
 
 }
+
+//red
+int isBinarySearch(tree *node){
+
+    if (isLeaf(node)) return 1;
+
+    int binarySearch;
+    binarySearch = 1;
+
+    if (node->left != NULL){
+        if (node->value < node->left->value) return 0;
+    }
+
+    if (node->right != NULL){
+        if (node->value > node->right->value) return 0;
+    }
+
+    if (node->left != NULL){
+        binarySearch = isBinarySearch(node->left);
+        if (binarySearch == 0) return 0;
+    }
+
+    if (node->right != NULL){
+        binarySearch = isBinarySearch(node->right);
+        if (binarySearch == 0) return 0;
+    }
+
+    return binarySearch;
+
+
+
+}
+
+int isLeaf(tree *node){
+    return node->left == NULL && node->right == NULL;
+}
+
 
 /************/
 /** QUEUE **/
@@ -227,4 +259,52 @@ node* front(queue *q){
 
 node* rear(queue *q){
     return q->tail;
+}
+
+/*
+ Binary Search
+                13
+            ´         `
+         10              25
+       ´    `          ´     `
+    2         12    20          31
+                              ´
+                            29
+*/
+tree* build_tree_1(){
+    tree *root = createNodeTree(NULL, 13);
+
+    root->left = createNodeTree(root, 10);
+        root->left->left = createNodeTree(root->left, 2);
+        root->left->right = createNodeTree(root->left, 12);
+    root->right = createNodeTree(root, 25);
+        root->right->left = createNodeTree(root, 20);
+        root->right->right = createNodeTree(root, 31);
+            root->right->right->left = createNodeTree(root, 29);
+
+    return root;
+}
+
+/*
+ Not Binary Search
+                13
+            ´         `
+         10              25
+       ´    `          ´     `
+    11        12    20          31
+                              ´
+                            29
+*/
+tree* build_tree_2(){
+    tree *root = createNodeTree(NULL, 13);
+
+    root->left = createNodeTree(root, 10);
+    root->left->left = createNodeTree(root->left, 11);
+    root->left->right = createNodeTree(root->left, 12);
+    root->right = createNodeTree(root, 25);
+    root->right->left = createNodeTree(root, 20);
+    root->right->right = createNodeTree(root, 31);
+    root->right->right->left = createNodeTree(root, 29);
+
+    return root;
 }
