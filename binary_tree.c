@@ -47,10 +47,11 @@ tree* build_tree_1(); //binary search - nao completa
 tree* build_tree_2(); //not binary search - nao completa
 tree* build_tree_3(); //binary search - completa
 tree* build_tree_4(); //binary search - nao completa
+tree* build_tree_5(); //not binary search
 
 
 void main(void){
-    tree *root = build_tree_4();
+    tree *root = build_tree_5();
 
     printf("BFS - Breadth First Search: ");
     run_breadth_first_search(root); //percurso em largura
@@ -357,7 +358,7 @@ tree* build_tree_3(){
                 13
             ´         `
          10              25
-       ´    `          ´     `
+       ´    `
     2         12
 */
 tree* build_tree_4(){
@@ -367,6 +368,30 @@ tree* build_tree_4(){
         root->left->left = createNodeTree(root->left, 2);
         root->left->right = createNodeTree(root->left, 12);
     root->right = createNodeTree(root, 25);
+
+    return root;
+}
+
+/*
+ Not Binary Search
+                13
+            ´         `
+         10              19
+       ´    `          ´     `
+    8         12    20          31
+                              ´
+                            29
+*/
+tree* build_tree_5(){
+    tree *root = createNodeTree(NULL, 13);
+
+    root->left = createNodeTree(root, 10);
+        root->left->left = createNodeTree(root->left, 8);
+        root->left->right = createNodeTree(root->left, 12);
+    root->right = createNodeTree(root, 19);
+        root->right->left = createNodeTree(root, 20);
+        root->right->right = createNodeTree(root, 31);
+        root->right->right->left = createNodeTree(root, 29);
 
     return root;
 }
