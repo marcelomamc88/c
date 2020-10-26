@@ -14,17 +14,18 @@ int parent(int *tree, int value);
 int sequential_search_i(int *tree, int value);
 int binary_search_r(int *tree, int value, int root);
 int* generic_build_tree(int *elements, int size);
-int* build_tree1();
 void print(int *tree);
 int qty_nodes(int *tree);
 int find_end(int *tree);
 int has_child(int *tree, int value);
 int get_left(int *tree, int value);
 int get_right(int *tree, int value);
-
+int sift_r(int *tree, int root);
+int* build_tree1();
+int* build_tree2();
 
 void main(void){
-    int *tree = build_tree1();
+    int *tree = build_tree2();
     printf("\r\nQTY NODES: %d", qty_nodes(tree));
     printf("\r\nVALUE 12 (NOT) FOUND. POSITION: %d (sequential search)", sequential_search_i(tree, 12));
 
@@ -59,6 +60,35 @@ void main(void){
     post_order(tree, 0);
 
     print(tree);
+
+    printf("\r\nSift: ");
+    sift_r(tree, 0);
+    print(tree);
+}
+
+int sift_r(int *tree, int root){
+    int esq = 2*(root)+1;
+    int dir = 2*(root+1);
+    int maior = root;
+    int len = qty_nodes(tree);
+    int aux;
+
+    if (esq < len && tree[esq] > tree[root]){
+        maior = esq;
+    }
+    if (dir < len && tree[dir] > tree[maior]){
+        maior = dir;
+    }
+    if (root != maior){
+        aux = tree[root];
+        tree[root] = tree[maior];
+        tree[maior] = aux;
+        sift_r(tree, maior);
+    }else{
+        if (++root < len){
+            sift_r(tree, root);
+        }
+    }
 }
 
 //raiz menor ou igual aos filhos
@@ -209,6 +239,22 @@ int* build_tree1(){
     return generic_build_tree(elements, 10);
 }
 
+/*
+ Heap para SIFT
+                 16
+            ´         `
+         8              14
+       ´    `          ´     `
+    8          15     9          3
+  ´   `      ´
+2      4    1
+*/
+int* build_tree2(){
+    int elements[10] = {16,8,14,8,15,9,3,2,4,1};
+
+    return generic_build_tree(elements, 10);
+}
+
 int* generic_build_tree(int *elements, int size){
     int *tree = (int *) malloc((size+1) * sizeof(int));
 
@@ -225,7 +271,7 @@ int* generic_build_tree(int *elements, int size){
 void print(int *tree){
     int i = 0;
 
-    printf("\r\n");
+    printf("\r\nHeap Elements: ");
     while(tree[i] != -1){
         printf("%d, ", tree[i]);
         ++i;
