@@ -21,11 +21,13 @@ int has_child(int *tree, int value);
 int get_left(int *tree, int value);
 int get_right(int *tree, int value);
 int sift_r(int *tree, int root);
+void build(int *tree);
 int* build_tree1();
 int* build_tree2();
+int* build_tree3(); //para o build
 
 void main(void){
-    int *tree = build_tree2();
+    int *tree = build_tree3();
     printf("\r\nQTY NODES: %d", qty_nodes(tree));
     printf("\r\nVALUE 12 (NOT) FOUND. POSITION: %d (sequential search)", sequential_search_i(tree, 12));
 
@@ -64,6 +66,10 @@ void main(void){
     printf("\r\nSift: ");
     sift_r(tree, 0);
     print(tree);
+
+    printf("\r\nBuild");
+    build(tree);
+    print(tree);
 }
 
 int sift_r(int *tree, int root){
@@ -88,6 +94,12 @@ int sift_r(int *tree, int root){
         if (++root < len){
             sift_r(tree, root);
         }
+    }
+}
+
+void build(int *tree){
+    for (int i = qty_nodes(tree)/2; i>=0; --i){ //build retrocede na árvore e chama o sift para realizar as trocas avançando.
+        sift_r(tree, i);
     }
 }
 
@@ -223,6 +235,37 @@ int qty_nodes(int *tree){
     return find_end(tree);
 }
 
+
+int* generic_build_tree(int *elements, int size){
+    int *tree = (int *) malloc((size+1) * sizeof(int));
+
+    int i = 0;
+    while(i++<size)
+        tree[i-1] = elements[i-1];
+
+    tree[i-1] = -1;
+
+    return tree;
+}
+
+
+void print(int *tree){
+    int i = 0;
+
+    printf("\r\nHeap Elements: ");
+    while(tree[i] != -1){
+        printf("%d, ", tree[i]);
+        ++i;
+    }
+}
+
+int find_end(int *tree){
+    int i = 0;
+    while(tree[i++] != -1);
+
+    return --i;
+}
+
 /*
  Heap
                  16
@@ -255,32 +298,17 @@ int* build_tree2(){
     return generic_build_tree(elements, 10);
 }
 
-int* generic_build_tree(int *elements, int size){
-    int *tree = (int *) malloc((size+1) * sizeof(int));
+/*
+                 4
+            ´         `
+         1              3
+       ´    `          ´     `
+    2          16     9          10
+  ´   `      ´
+14     8    7
+*/
+int* build_tree3(){
+    int elements[10] = {4,1,3,2,16,9,10,14,8,7};
 
-    int i = 0;
-    while(i++<size)
-        tree[i-1] = elements[i-1];
-
-    tree[i-1] = -1;
-
-    return tree;
-}
-
-
-void print(int *tree){
-    int i = 0;
-
-    printf("\r\nHeap Elements: ");
-    while(tree[i] != -1){
-        printf("%d, ", tree[i]);
-        ++i;
-    }
-}
-
-int find_end(int *tree){
-    int i = 0;
-    while(tree[i++] != -1);
-
-    return --i;
+    return generic_build_tree(elements, 10);
 }
