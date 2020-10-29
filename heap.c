@@ -20,14 +20,23 @@ int find_end(int *tree);
 int has_child(int *tree, int value);
 int get_left(int *tree, int value);
 int get_right(int *tree, int value);
-int sift_r(int *tree, int root);
+int sift_r(int *tree, int root, int n);
+int sift_i(int *tree, int root, int n);
+void heapsort(int *tree);
 void build(int *tree);
 int* build_tree1();
 int* build_tree2();
 int* build_tree3(); //para o build
 
+/* FILA DE PRIORIDADE */
+int fp_max_min(int *tree);
+int fp_extract_max_min(int *tree);
+int fp_insert(int *tree, int value);
+int fp_modify(int *tree, int k, int x); //k posicao, x prioridade
+
 void main(void){
-    int *tree = build_tree3();
+    int *tree = build_tree2();
+
     printf("\r\nQTY NODES: %d", qty_nodes(tree));
     printf("\r\nVALUE 12 (NOT) FOUND. POSITION: %d (sequential search)", sequential_search_i(tree, 12));
 
@@ -64,42 +73,116 @@ void main(void){
     print(tree);
 
     printf("\r\nSift: ");
-    sift_r(tree, 0);
+    sift_i(tree, 0, qty_nodes(tree));
     print(tree);
 
     printf("\r\nBuild");
     build(tree);
     print(tree);
+
+    printf("\r\nEXTRACT MAX: %d", fp_extract_max_min(tree));
+    print(tree);
+
+    printf("\r\n\r\nHEAPSORT");
+    int vetor_heapsort[6] = {3,1,7,2,4,-1};
+    print(vetor_heapsort);
+    heapsort(vetor_heapsort);
+    print(vetor_heapsort);
 }
 
-int sift_r(int *tree, int root){
+/* FILA DE PRIORIDADE */
+int fp_max_min(int *tree){
+    if (qty_nodes(tree) == 0) return -1;
+
+    return tree[0];
+}
+
+int fp_extract_max_min(int *tree){
+    int pos_end = find_end(tree)-1;
+    int aux = tree[0];
+    tree[0] = tree[pos_end];
+    tree[pos_end] = -1;
+
+    sift_i(tree,0, qty_nodes(tree));
+
+    return aux;
+}
+
+int fp_insert(int *tree, int value){
+    
+};
+int fp_modify(int *tree, int k, int x); //k posicao, x prioridade
+
+/* HEAPSORT */
+void heapsort(int *tree){
+    build(tree);
+
+    int p_last_element = qty_nodes(tree)-1;
+
+    int last_element;
+
+    while (p_last_element != 0){
+        last_element = tree[p_last_element];
+        tree[p_last_element--] = tree[0];
+        tree[0] = last_element;
+
+        sift_r(tree,0, p_last_element);
+    }
+}
+
+int sift_r(int *tree, int root, int end){
     int esq = 2*(root)+1;
     int dir = 2*(root+1);
     int maior = root;
-    int len = qty_nodes(tree);
+
     int aux;
 
-    if (esq < len && tree[esq] > tree[root]){
+    if (esq <= end && tree[esq] > tree[root]){
         maior = esq;
     }
-    if (dir < len && tree[dir] > tree[maior]){
+    if (dir <= end && tree[dir] > tree[maior]){
         maior = dir;
     }
     if (root != maior){
         aux = tree[root];
         tree[root] = tree[maior];
         tree[maior] = aux;
-        sift_r(tree, maior);
+        sift_r(tree, maior, end);
     }else{
-        if (++root < len){
-            sift_r(tree, root);
+        if (++root < end){
+            sift_r(tree, root, end);
         }
+    }
+}
+
+int sift_i(int *tree, int root, int n){
+    int aux;
+
+    while (root < n){
+        int esq = 2*(root)+1;
+        int dir = 2*(root+1);
+
+        int maior = root;
+
+        if (esq <= n && tree[esq] > tree[root]) {
+            maior = esq;
+        }
+        if (dir <= n && tree[dir] > tree[maior]) {
+            maior = dir;
+        }
+        if (maior != root) {
+            aux = tree[root];
+            tree[root] = tree[maior];
+            tree[maior] = aux;
+        }
+
+        ++root;
     }
 }
 
 void build(int *tree){
     for (int i = qty_nodes(tree)/2; i>=0; --i){ //build retrocede na árvore e chama o sift para realizar as trocas avançando.
-        sift_r(tree, i);
+        sift_r(tree, i, qty_nodes(tree));
     }
 }
 
