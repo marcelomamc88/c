@@ -5,8 +5,8 @@
 //***** CONFIGS *****
 //TYPE_NAME: "int"|"float"|"char"
 //typedef: int|float|char*
-#define TYPE_NAME "char"
-typedef char* TYPE;
+#define TYPE_NAME "int"
+typedef int TYPE;
 //***** CONFIGS *****
 
 typedef struct t_element element;
