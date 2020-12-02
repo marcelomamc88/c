@@ -19,6 +19,7 @@ typedef struct t_queue queue;
 struct t_queue{
     node *head;
     node *tail;
+    int size;
 };
 
 
@@ -31,6 +32,7 @@ struct t_queue{
 /* ok */ node* front(queue *q);
 /* ok */ node* rear(queue *q);
 /* ok */ const char* format();
+/* ok */ int size(queue *q);
 
 
 queue* createQueue(){
@@ -38,6 +40,7 @@ queue* createQueue(){
 
     q->head = NULL;
     q->tail = NULL;
+    q->size = 0;
 }
 
 node* createNode(TYPE value){
@@ -63,6 +66,7 @@ void enqueue(TYPE value, queue *q){
     }
 
     q->tail = n;
+    ++q->size;
 }
 
 node* dequeue(queue *q){
@@ -71,6 +75,7 @@ node* dequeue(queue *q){
     node *head = q->head;
 
     q->head = head->next;
+    --q->size;
 
     return head;
 }
@@ -111,4 +116,8 @@ node* front(queue *q){
 
 node* rear(queue *q){
     return q->tail;
+}
+
+int size(queue *q){
+    return q->size;
 }

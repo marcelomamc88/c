@@ -29,8 +29,6 @@ void selectionsort(int *vetor){
         temp = vetor[posMenor];
         vetor[posMenor] = vetor[i];
         vetor[i] = temp;
-
-        print(vetor);
     }
 }
 

@@ -24,10 +24,7 @@ void insertionsort(int *vetor){
             vetor[j] = vetor[j-1];
         }
         vetor[j] = reference;
-
-        print(vetor);
     }
-
 }
 
 void print(int *vetor){
